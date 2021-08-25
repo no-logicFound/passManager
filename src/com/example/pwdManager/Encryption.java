@@ -8,20 +8,7 @@ import java.security.MessageDigest;
 public class Encryption {
     byte[] digestedPassword = {};
     String generatedPassword;
-    //byte[] salt;
 
-    // get the string version of the password from user
-    private String getPasswordFromUser() {
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("Password : ");
-        String password = sc.nextLine();
-        sc.close();
-        if(password.isEmpty()){
-            password = "password";}
-        return password;
-
-    }
 
     // change password to --> byte[] digestPassword
     private void digestPassword (String password){
@@ -29,12 +16,11 @@ public class Encryption {
 
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-512");
-            // change password to byte array
-            digestedPassword = md.digest(bytePassword);
+
+            digestedPassword = md.digest(bytePassword); // change password to byte array
         }catch (NoSuchAlgorithmException e){
             e.printStackTrace();
         }
-        //System.out.println(Arrays.toString(digestedPassword));
     }
 
     // takes byte[] digestedPassword to it's hashed version
@@ -44,17 +30,12 @@ public class Encryption {
             sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
         }
         generatedPassword = sb.toString();
-
-        System.out.println(generatedPassword);
         return generatedPassword;
     }
 
-     private String getPassword(){
-        return getPasswordFromUser();
-    }
 
-    String convertPwdToHash(){
-        digestPassword(getPassword());
+    String convertPwdToHash(String masterPass){
+        digestPassword(masterPass);
         return hashPassword(digestedPassword);
     }
 
