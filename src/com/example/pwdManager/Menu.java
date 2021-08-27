@@ -8,6 +8,19 @@ import java.util.Scanner;
 public class Menu {
     private String referenceName, username, password;
 
+    public void greetNewUser(){
+        System.out.println("""
+
+                             _                                 _                          _\s
+                            | |                               | |                        | |
+                 _ _ _ _____| | ____ ___  ____  _____    _____| |__   ___  _____  ____ __| |
+                | | | | ___ | |/ ___/ _ \\|    \\| ___ |  (____ |  _ \\ / _ \\(____ |/ ___/ _  |
+                | | | | ____| ( (__| |_| | | | | ____|  / ___ | |_) | |_| / ___ | |  ( (_| |
+                 \\___/|_____)\\_\\____\\___/|_|_|_|_____)  \\_____|____/ \\___/\\_____|_|   \\____|
+                                                                                           \s
+                """);
+    }
+
     public void showMenu(){
 
         System.out.println("--------------------------");
@@ -25,7 +38,7 @@ public class Menu {
 
         br.readLine();
 
-
+        //TODO need to implement this method
 //        switch (in) {
 //            case 1 -> {
 //

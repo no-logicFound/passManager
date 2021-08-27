@@ -6,15 +6,16 @@ import java.sql.*;
 External library  --> mysql-connector-java-8.0.26.jar
 */
 public class Database {
-    static String dbName = "testDB";
-    static String tableName = "LOGIN_INFO";
+    static final String DB_NAME = "testDB";
+    static final String loginTableName = "login_info";
+    static final String MASTER_PASS_TABLE_NAME = "master_password_holder";
     static final String DRIVER = "com.mysql.cj.jdbc.Driver";
     static final String URL = "jdbc:mysql://localhost/?user=root&password=password";
-    static final String DATABASE_URL = "jdbc:mysql://localhost:3306/" + dbName;
-    static final String user = "root";
-    static final String password = "password";
+    static final String DATABASE_URL = "jdbc:mysql://localhost:3306/" + DB_NAME;
+    static final String USER = "root";
+    static final String PASSWORD = "password";
 
-    public static void createDatabaseIfNotExists(String dbName){
+    public void createDatabaseIfNotExists(String dbName){
         try{
             Connection con = DriverManager.getConnection(URL);
             Statement s = con.createStatement();
@@ -27,7 +28,7 @@ public class Database {
         }
     }
 
-    public static void dropDatabaseIfExists(String dbName){
+    public void dropDatabaseIfExists(String dbName){
         try{
             Connection con = DriverManager.getConnection(URL);
             Statement s = con.createStatement();
@@ -38,7 +39,7 @@ public class Database {
         }
     }
 
-    public static void createTable(String tableName){
+    public void createLoginTable(String tableName){
         try{
             Class.forName(DRIVER);
             String sql= "CREATE TABLE " + tableName +
@@ -47,7 +48,7 @@ public class Database {
                         " username VARCHAR(40), " +
                         " password VARCHAR(40), " +
                         " PRIMARY KEY ( id ))";
-            Connection con = DriverManager.getConnection(DATABASE_URL, user, password);
+            Connection con = DriverManager.getConnection(DATABASE_URL, USER, PASSWORD);
             Statement s = con.createStatement();
             s.execute(sql);
             System.out.println(tableName + " table added");
@@ -56,14 +57,14 @@ public class Database {
         }
     }
 
-    public static void masterPassTable(String tableName){
+    public void createMasterPassTable(String tableName){
         try{
             Class.forName(DRIVER);
             String sql= "CREATE TABLE " + tableName +
-                    "(id INTEGER not NULL auto_increment, " +
-                    " masterPassword VARCHAR(128), " +
+                    "(id INTEGER auto_increment, " +
+                    " masterPassword VARCHAR(128) NOT NULL, " +
                     " PRIMARY KEY ( id ))";
-            Connection con = DriverManager.getConnection(DATABASE_URL, user, password);
+            Connection con = DriverManager.getConnection(DATABASE_URL, USER, PASSWORD);
             Statement s = con.createStatement();
             s.execute(sql);
             System.out.println(tableName + " table added");
@@ -72,12 +73,18 @@ public class Database {
         }
     }
 
-    public static void setMasterPassword(){
-
-    }
-
-
-    public void setDatabaseName(String dbName){
-        Database.dbName = dbName;
+    public void insertMasterPassIntoTable(String hashMasterPass){
+        try{
+            Class.forName(DRIVER);
+            String sql= "INSERT INTO " + MASTER_PASS_TABLE_NAME + "(masterPassword) " +
+                        "VALUES(?);";
+            Connection con = DriverManager.getConnection(DATABASE_URL, USER, PASSWORD);
+            PreparedStatement prepStatement = con.prepareStatement(sql);
+            prepStatement.setString(1, hashMasterPass);
+            prepStatement.execute();
+            System.out.println("Master password added");
+        }catch (SQLException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
     }
 }

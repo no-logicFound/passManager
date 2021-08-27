@@ -1,22 +1,19 @@
 package com.example.pwdManager;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.Buffer;
-import java.util.Scanner;
+import java.io.*;
+
 
 public class Auth {
 
     String createMasterPass() throws IOException {
+
         BufferedReader sc = new BufferedReader(new InputStreamReader(System.in));
         System.out.print("Please provide a secure master password that you will not forget: ");
-//        String firstInput = sc.readLine();
+        String firstInput = sc.readLine();
 
         System.out.print("Now re-enter the master password for verification: ");
         String secondInput = sc.readLine();
-        sc.close();
+
 
 //        if(firstInput.equals(secondInput)){System.out.println("You're all set!! (✿◡‿◡)");}
 //        else {
@@ -34,7 +31,6 @@ public class Auth {
             try{file.createNewFile();}
             catch (IOException e){e.printStackTrace();}
         }
-        file.deleteOnExit();  // for testing purposes only.
         return firstTime;
     }
 
