@@ -1,6 +1,7 @@
 package com.example.pwdManager;
 
 import java.io.*;
+import java.util.Scanner;
 
 
 public class Auth {
@@ -15,11 +16,11 @@ public class Auth {
         String secondInput = sc.readLine();
 
 
-//        if(firstInput.equals(secondInput)){System.out.println("You're all set!! (✿◡‿◡)");}
-//        else {
-//            System.out.println("Nah, try again.");
-//            createMasterPass();
-//        }
+        if(firstInput.equals(secondInput)){System.out.println("You're all set!! (✿◡‿◡)");}
+        else {
+            System.out.println("Nah, try again.");
+            createMasterPass();
+        }
         return secondInput;
     }
 
@@ -34,12 +35,20 @@ public class Auth {
         return firstTime;
     }
 
-    boolean isValidMasterPassword(String userInput){
+    boolean isValidMasterPassword(){
+        int numOfTries = 3;
+        while (numOfTries>0){
+            System.out.print("Please enter your master password: ");
+            String userInput = new Scanner(System.in).nextLine(); // TODO: replace with console.readPassword
+            String givenPassword = new Encryption().convertPwdToHash(userInput);
+            String storedPassword = new Database().retrieveMasterPassword();
 
-        String password = new Encryption().convertPwdToHash(userInput);
-
-        // compare given password to the stored masterPassword
-
+            // compare given password to the stored masterPassword
+            numOfTries--;
+            if(givenPassword.equals(storedPassword)){return true;}
+            System.out.println("You have " + numOfTries + " tries left." );
+        }
+        System.out.println("🤦🏽‍♂️");
         return false;
     }
 }

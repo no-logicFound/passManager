@@ -22,7 +22,7 @@ public class Database {
             s.execute("CREATE DATABASE IF NOT EXISTS "+ dbName);
             s.close();
 
-            System.out.println(dbName + " database created");
+            System.out.println(dbName + " database created"); // TODO: should be removed in final version
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -51,7 +51,7 @@ public class Database {
             Connection con = DriverManager.getConnection(DATABASE_URL, USER, PASSWORD);
             Statement s = con.createStatement();
             s.execute(sql);
-            System.out.println(tableName + " table added");
+//            System.out.println(tableName + " table added");
         }catch (SQLException | ClassNotFoundException e){
             e.printStackTrace();
         }
@@ -67,7 +67,7 @@ public class Database {
             Connection con = DriverManager.getConnection(DATABASE_URL, USER, PASSWORD);
             Statement s = con.createStatement();
             s.execute(sql);
-            System.out.println(tableName + " table added");
+//            System.out.println(tableName + " table added");
         }catch (SQLException | ClassNotFoundException e){
             e.printStackTrace();
         }
@@ -86,5 +86,22 @@ public class Database {
         }catch (SQLException | ClassNotFoundException e){
             e.printStackTrace();
         }
+    }
+
+    public String retrieveMasterPassword(){
+        String masterPassword = "";
+        try {
+            Class.forName(DRIVER);
+            Connection con = DriverManager.getConnection(DATABASE_URL, USER, PASSWORD);
+            Statement s = con.createStatement();
+            String query = "SELECT masterPassword from " + MASTER_PASS_TABLE_NAME;
+            ResultSet rs = s.executeQuery(query);
+            while(rs.next()){
+                masterPassword = rs.getString("masterPassword");
+            }
+        }catch (SQLException | ClassNotFoundException e){
+            e.printStackTrace();
+        }
+        return masterPassword;
     }
 }

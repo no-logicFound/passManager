@@ -20,9 +20,17 @@ public class Runnable {
         boolean isFirstTime = new Auth().isFirstTime();
 
         if(isFirstTime) {
+            new Database().dropDatabaseIfExists(dbName);
             initializeApp(dbName, masterPassTableName);
             new Menu().showMenu();
-//            new Database().dropDatabaseIfExists(dbName);
+            new Menu().executeMenu();
+        }else {
+            boolean hasAccess = new Auth().isValidMasterPassword();
+            if (hasAccess){
+                new Menu().greetNewUser();
+                new Menu().showMenu();
+                new Menu().executeMenu();
+            }
         }
 
     }
